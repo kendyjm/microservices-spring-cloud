@@ -20,6 +20,10 @@
 ## Keywords 
 
 ## Best pratices
+TODO see <https://dzone.com/articles/using-spring-config-server> "emember that the variable spring.application.nameset the application name and indicates the name of the file in the GIT repository where the settings were sought."
+* **Dependencies**
+    * Every service should add Config-Client `spring-cloud-starter-config` as a dependency to be able to connect to the Spring-Cloud config server.
+    * While the Config server has `spring-cloud-config-server` as a dependency AND annotation `@EnableConfigServer` in main class
 * **Naming** : Give a name to your applications `spring.application.name` to easily identify it
 * **Configuration** : prefix your properties with the application name to easily identify them
     * Retrieve them with a class annoted with `@ConfigurationProperties`
