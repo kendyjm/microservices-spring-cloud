@@ -17,6 +17,14 @@
 * Implement Distributed tracing with Spring Cloud Sleuth and Zipkin
 * Implement Fault Tolerance with Zipkin
 
-## Keywords
+## Keywords 
+
+## Best pratices
+* **Naming** : Give a name to your applications `spring.application.name` to easily identify it
+* **Configuration** : prefix your properties with the application name to easily identify them
+    * Retrieve them with a class annoted with `@ConfigurationProperties`
+
 
 ## Startup
+
+
