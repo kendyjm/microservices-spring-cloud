@@ -31,9 +31,10 @@ TODO conf accessible ici http://localhost:8888/limits-service/[default|dev|qa...
 * **Configuration** : prefix your properties with the application name to easily identify them
     * Retrieve them with a class annoted with `@ConfigurationProperties`
 
-## Debugging Problems with...
+## Debugging Problems
 * [Spring Cloud Config Server](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-spring-cloud-config-server)
-
+* [Activate Spring Boot profile from IntelliJ](https://stackoverflow.com/a/52487280)
+* [Share IntelliJ RUN configurations](https://stackoverflow.com/a/46058224)
 
 ## Startup
 
@@ -42,6 +43,7 @@ TODO conf accessible ici http://localhost:8888/limits-service/[default|dev|qa...
 For further reference, please consider the following sections:
 
 * [Spring Cloud Config](https://cloud.spring.io/spring-cloud-config/reference/html/)
+* [Bootstrap Application Context](https://cloud.spring.io/spring-cloud-commons/multi/multi__spring_cloud_context_application_context_services.html#_the_bootstrap_application_context)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
