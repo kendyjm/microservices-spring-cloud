@@ -18,8 +18,8 @@
 * Implement Fault Tolerance with Zipkin
 
 ## Keywords 
-* **Spring Cloud Config Server** : `spring-cloud-config-server` as a dependency, annotation `@EnableConfigServer` in main class, `spring.cloud.config.server.git.uri` in configuration file application.properties
-* **Any service** : `spring-cloud-starter-config` as a dependency, `spring.application.name` and `spring.cloud.config.uri` in configuration file renamed as bootstrap.properties.
+* **Spring Cloud Config Server** : `spring-cloud-config-server` (config-server) as a dependency, annotation `@EnableConfigServer` in main class, `spring.cloud.config.server.git.uri` in configuration file application.properties
+* **Any service** : `spring-cloud-starter-config` (config-clinet) as a dependency, `spring.application.name` and `spring.cloud.config.uri` and `server.port` in configuration file renamed as bootstrap.properties.
 * **Git Repository** : contains configuration files for each service/env : {spring.application.name}[dev|qa|blabla].properties
 
 ## Best pratices
