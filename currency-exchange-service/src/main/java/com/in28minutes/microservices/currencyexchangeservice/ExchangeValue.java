@@ -1,24 +1,28 @@
 package com.in28minutes.microservices.currencyexchangeservice;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
+@NoArgsConstructor
+@ToString
 public class ExchangeValue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final Long id;
+    private Long id;
 
     @Column(name = "currency_from")
-    private final String from;
+    private String from;
 
     @Column(name = "currency_to")
-    private final String to;
-    private final BigDecimal conversionMultiple;
+    private String to;
+    private BigDecimal conversionMultiple;
     private int port; // server port
 
 }
