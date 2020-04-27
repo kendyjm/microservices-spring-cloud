@@ -4,7 +4,6 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 
-
 @Data
 public class ExchangeValue {
 
@@ -12,5 +11,6 @@ public class ExchangeValue {
     private final String from;
     private final String to;
     private final BigDecimal conversionMultiple;
+    private int port; // server port
 
 }
