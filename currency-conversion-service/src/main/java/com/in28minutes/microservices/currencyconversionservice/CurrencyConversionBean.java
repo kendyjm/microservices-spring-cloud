@@ -16,7 +16,7 @@ public class CurrencyConversionBean {
     Long id;
     String from;
     String to;
-    BigDecimal conversionMutiple;
+    BigDecimal conversionMultiple;
     BigDecimal quantity;
     BigDecimal totalCalculatedAmount;
     int port;
