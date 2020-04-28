@@ -30,7 +30,7 @@ public class CurrencyExchangeController {
         int serverPortInt = Integer.valueOf(serverPort);
         logger.info("serverPortInt {}", serverPortInt);
         exchangeValue.setPort(serverPortInt);
-
+        logger.info("Returned response : {}", exchangeValue);
         return ResponseEntity.ok(exchangeValue);
     }
 }

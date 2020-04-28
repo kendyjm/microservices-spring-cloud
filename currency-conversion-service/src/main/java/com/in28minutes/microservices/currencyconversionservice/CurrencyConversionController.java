@@ -22,15 +22,15 @@ public class CurrencyConversionController {
     @Autowired
     private Environment environment;
 
+    @Autowired
+    private CurrencyExchangeProxy currencyExchangeProxy; //our Feign client for CurrencyExchange services
+
+    /*
+     * Classic WS call , using RestTemplate...there is too much code here, see the version using the WS client : FEIGN
+     */
     @GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
     public ResponseEntity<CurrencyConversionBean> convertCurrency(@PathVariable String from, @PathVariable String to, @PathVariable BigDecimal quantity) {
         logger.info("Received request : from {} to {} quantity {}", from, to, quantity);
-
-
-        // hardcoded
-        // int serverPort = Integer.parseInt(environment.getRequiredProperty("local.server.port"));
-        // CurrencyConversionBean currencyConversionBean = new CurrencyConversionBean(1L, from, to, BigDecimal.valueOf(65), quantity, BigDecimal.valueOf(65).multiply(quantity), serverPort);
-
 
         Map<String, String> uriVariables = new HashMap<>();
         uriVariables.put("from", from);
@@ -42,6 +42,17 @@ public class CurrencyConversionController {
         logger.info("Response conversion : {}", currencyConversionBean);
 
         CurrencyConversionBean currencyConversionBeanReturned = new CurrencyConversionBean(currencyConversionBean.getId(), currencyConversionBean.getFrom(), currencyConversionBean.getTo(), currencyConversionBean.getConversionMultiple(), quantity, quantity.multiply(currencyConversionBean.getConversionMultiple()), currencyConversionBean.getPort());
+        return ResponseEntity.ok(currencyConversionBeanReturned);
+    }
+
+    @GetMapping("/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
+    public ResponseEntity<CurrencyConversionBean> convertCurrencyFeign(@PathVariable String from, @PathVariable String to, @PathVariable BigDecimal quantity) {
+        logger.info("Received request (feign) : from {} to {} quantity {}", from, to, quantity);
+        CurrencyConversionBean currencyConversionBean = currencyExchangeProxy.retrieveExchangeValue(from, to);
+        logger.info("Response from exchange service : {}", currencyConversionBean);
+
+        CurrencyConversionBean currencyConversionBeanReturned = new CurrencyConversionBean(currencyConversionBean.getId(), currencyConversionBean.getFrom(), currencyConversionBean.getTo(), currencyConversionBean.getConversionMultiple(), quantity, quantity.multiply(currencyConversionBean.getConversionMultiple()), currencyConversionBean.getPort());
+        logger.info("Returned response : {}", currencyConversionBeanReturned);
         return ResponseEntity.ok(currencyConversionBeanReturned);
     }
 }
