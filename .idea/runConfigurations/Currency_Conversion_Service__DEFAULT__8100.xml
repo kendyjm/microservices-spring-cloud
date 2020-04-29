@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Currency Conversion Service (DEFAULT)" type="MavenRunConfiguration" factoryName="Maven" folderName="DEFAULT PROFILE" singleton="false" show_console_on_std_err="true">
+  <configuration default="false" name="Currency Conversion Service (DEFAULT) 8100" type="MavenRunConfiguration" factoryName="Maven" folderName="DEFAULT PROFILE" singleton="false" show_console_on_std_err="true">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings">
