@@ -45,7 +45,7 @@ For further reference, please consider the following sections:
 
 * [Spring Cloud Config](https://cloud.spring.io/spring-cloud-config/reference/html/)
 * [Bootstrap Application Context](https://cloud.spring.io/spring-cloud-commons/multi/multi__spring_cloud_context_application_context_services.html#_the_bootstrap_application_context)
-* [Declarative REST Client : OpenFeign](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)
+* [Spring Cloud OpenFeign : Declarative REST Client](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
