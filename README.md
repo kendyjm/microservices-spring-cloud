@@ -26,6 +26,10 @@
 * **Eureka** : service registry, useful because it makes client-side load-balancing easier and decouples service providers from consumers without the need for DNS.
   * Server : `spring-cloud-starter-netflix-eureka-server`, `@EnableEurekaServer`, `eureka.client.register-with-eureka`, `eureka.client.fetch-registry`, [Eureka UI](http://localhost:8761/)
   * Client : `spring-cloud-starter-netflix-eureka-client`, `@EnableDiscoveryClient`, `eureka.client.service-url.default-zone`
+* **Zuul** : Api Gateway, all calls get routed through the API gateway, with common fetures like authentication, authorization and security, rate limits, fault tolerance, service aggregation; it's a great place for debugging, analytics...
+  * Create a component for the Zuul API Gateway server. `spring-cloud-starter-netflix-zuul`, `@EnableZuulProxy`
+  * Decide/implement what should it do when it intercepts a request
+  * Make sure all important requests are configured to pass through the Zuul API Gateway
 
 ## Best pratices
 * **Dependencies**
@@ -40,6 +44,7 @@
 Some dependencies used in this project are in maintenance mode:
 
 * Ribbon
+* Zuul
 
 The decision to move most of the Spring Cloud Netflix projects to maintenance mode was
 a response to Netflix not continuing maintenance of many of the libraries that Spring provided
@@ -54,6 +59,7 @@ for more information on maintenance mode and a list of suggested replacements fo
 * [Spring Cloud Config Server](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-spring-cloud-config-server)
 * [Feign and Ribbon](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-feign-and-ribbon)
 * [Naming Server Eureka and Ribbon](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-naming-server-eureka-and-ribbon)
+* [Zuul API Gateway](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zuul-api-gateway)
 
 
 ## Startup
@@ -66,6 +72,7 @@ For further reference, please consider the following sections:
 * [Spring Cloud OpenFeign : Declarative REST Client](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)
 * [Ribbon : Client-side load-balancing](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html)
 * [Eureka : Service Registration and Discovery](https://cloud.spring.io/spring-cloud-netflix/reference/html/#spring-cloud-eureka-server)
+* [Zuul API Gateway : Intelligent Routing and Filtering](https://cloud.spring.io/spring-cloud-netflix/multi/multi__router_and_filter_zuul.html)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
@@ -74,3 +81,4 @@ The following guides illustrate how to use some features concretely:
 * [Spring Cloud OpenFeign : Declarative REST Client](https://spring.io/projects/spring-cloud-openfeign)
 * [Ribbon : Client-side load-balancing](https://spring.io/guides/gs/client-side-load-balancing/)
 * [Eureka : Service Registration and Discovery](https://spring.io/guides/gs/service-registration-and-discovery/)
+* [Zuul API Gateway : Intelligent Routing and Filtering](https://spring.io/guides/gs/routing-and-filtering/)
