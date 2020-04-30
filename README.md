@@ -28,7 +28,7 @@
   * Client : `spring-cloud-starter-netflix-eureka-client`, `@EnableDiscoveryClient`, `eureka.client.service-url.default-zone`
 * **Zuul** : Api Gateway, all calls get routed through the API gateway, with common fetures like authentication, authorization and security, rate limits, fault tolerance, service aggregation; it's a great place for debugging, analytics...
   * Create a component for the Zuul API Gateway server. `spring-cloud-starter-netflix-zuul`, `@EnableZuulProxy`
-  * Decide/implement what should it do when it intercepts a request
+  * Decide/implement what should it do when it intercepts a request. `ZuulFilter`
   * Make sure all important requests are configured to pass through the Zuul API Gateway
 
 ## Best pratices
