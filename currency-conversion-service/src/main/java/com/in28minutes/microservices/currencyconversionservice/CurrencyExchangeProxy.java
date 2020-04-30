@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
  * <p>
  * Note also that Placeholders are supported in the name and url attributes.
  * example @FeignClient(name = "${feign.name}", url = "${feign.url}")
- *
- * @see https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html
+ * <p>
+ * see https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html
+ * and https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html#spring-cloud-ribbon-without-eureka
  */
-//@FeignClient(name = "currency-exchange-service", url = "localhost:8000") url is not needed thanks to ribbon
+//@FeignClient(name = "currency-exchange-service", url = "localhost:8000") //this can be an arbitrary name, here we use the service-name, easier to remember/understand; this name will be used to create a Ribbon load balancer; and will be very useful when using the naming server.
 @FeignClient(name = "currency-exchange-service")
+// url is not needed thanks to ribbon, see currency-exchange-service.ribbon.listOfServers
 @RibbonClient(name = "currency-exchange-service")
 public interface CurrencyExchangeProxy {
 

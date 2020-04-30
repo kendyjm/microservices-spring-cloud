@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Spring-Cloud Config Server (DEFAULT)" type="MavenRunConfiguration" factoryName="Maven" singleton="false">
+  <configuration default="false" name="Spring-Cloud Config Server 8888" type="MavenRunConfiguration" factoryName="Maven" singleton="false">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings">

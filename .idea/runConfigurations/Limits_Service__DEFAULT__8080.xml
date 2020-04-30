@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Limits Service (DEFAULT)" type="MavenRunConfiguration" factoryName="Maven" folderName="DEFAULT PROFILE" singleton="false" show_console_on_std_err="true">
+  <configuration default="false" name="Limits Service (DEFAULT) 8080" type="MavenRunConfiguration" factoryName="Maven" folderName="DEFAULT PROFILE" singleton="false" show_console_on_std_err="true">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
