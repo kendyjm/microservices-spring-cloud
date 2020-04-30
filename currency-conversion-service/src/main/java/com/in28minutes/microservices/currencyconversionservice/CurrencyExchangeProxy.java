@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
  * and https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html#spring-cloud-ribbon-without-eureka
  */
 //@FeignClient(name = "currency-exchange-service", url = "localhost:8000") //this can be an arbitrary name, here we use the service-name, easier to remember/understand; this name will be used to create a Ribbon load balancer; and will be very useful when using the naming server.
-@FeignClient(name = "currency-exchange-service")
 // url is not needed thanks to ribbon, see currency-exchange-service.ribbon.listOfServers
+@FeignClient(name = "currency-exchange-service")
 @RibbonClient(name = "currency-exchange-service")
 public interface CurrencyExchangeProxy {
 
