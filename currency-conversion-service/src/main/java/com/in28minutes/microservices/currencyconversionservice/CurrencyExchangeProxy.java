@@ -18,11 +18,14 @@ import org.springframework.web.bind.annotation.PathVariable;
  */
 //@FeignClient(name = "currency-exchange-service", url = "localhost:8000") //this can be an arbitrary name, here we use the service-name, easier to remember/understand; this name will be used to create a Ribbon load balancer; and will be very useful when using the naming server.
 // url is not needed thanks to ribbon, see currency-exchange-service.ribbon.listOfServers
-@FeignClient(name = "currency-exchange-service")
+//@FeignClient(name = "currency-exchange-service")
+// the call to  /currency-exchange-service/currenc... will pass through the API Gateway:
+// equivalent uri: http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR
+@FeignClient(name = "netflix-zuul-api-gateway-server")
 @RibbonClient(name = "currency-exchange-service")
 public interface CurrencyExchangeProxy {
 
-    @GetMapping("/currency-exchange/from/{from}/to/{to}")
+    @GetMapping("/currency-exchange-service/currency-exchange/from/{from}/to/{to}")
     CurrencyConversionBean retrieveExchangeValue(@PathVariable String from, @PathVariable String to);
 
 }

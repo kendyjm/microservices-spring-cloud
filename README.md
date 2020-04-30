@@ -19,17 +19,17 @@
 
 ## Keywords 
 * **Spring Cloud Config Server** : `spring-cloud-config-server` (config-server) as a dependency, annotation `@EnableConfigServer` in main class, `spring.cloud.config.server.git.uri` in configuration file application.properties
-* **Any service** : `spring-cloud-starter-config` (config-client) as a dependency, `spring.application.name` and `spring.cloud.config.uri` in configuration file renamed as bootstrap.properties. see `http://<configServerLocation>/<serviceName>/[default|dev|qa...]` to display the retrieved/current configuration of a service.
+* **Any service** : `spring-cloud-starter-config` (config-client) as a dependency, `spring.application.name` and `spring.cloud.config.uri` in configuration file renamed as bootstrap.properties. see `http://{configServerLocation}/{serviceName}/{default|dev|qa...}` to display the retrieved/current configuration of a service.
 * **Git Repository** : contains configuration files for each service/env : {spring.application.name}[dev|qa|blabla].properties
 * **OpenFeign** : Is a declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations (see `@FeignClient`)
-* **Ribbon** : allows client-side loadbalancing (see `spring-cloud-starter-netflix-ribbon`, `@RibbonClient` and `<serviceName>.ribbon.listOfServers`). [Somes details](https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers#common-rules) about rules available.
+* **Ribbon** : allows client-side loadbalancing (see `spring-cloud-starter-netflix-ribbon`, `@RibbonClient` and `{serviceName}.ribbon.listOfServers`). [Somes details](https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers#common-rules) about rules available.
 * **Eureka** : service registry, useful because it makes client-side load-balancing easier and decouples service providers from consumers without the need for DNS.
   * Server : `spring-cloud-starter-netflix-eureka-server`, `@EnableEurekaServer`, `eureka.client.register-with-eureka`, `eureka.client.fetch-registry`, [Eureka UI](http://localhost:8761/)
   * Client : `spring-cloud-starter-netflix-eureka-client`, `@EnableDiscoveryClient`, `eureka.client.service-url.default-zone`
 * **Zuul** : Api Gateway, all calls get routed through the API gateway, with common fetures like authentication, authorization and security, rate limits, fault tolerance, service aggregation; it's a great place for debugging, analytics...
   * Create a component for the Zuul API Gateway server. `spring-cloud-starter-netflix-zuul`, `@EnableZuulProxy`
   * Decide/implement what should it do when it intercepts a request. `ZuulFilter`
-  * Make sure all important requests are configured to pass through the Zuul API Gateway
+  * Make sure all important requests are configured to pass through the Zuul API Gateway. `@FeignClient(name = {api-gateway-app-name})`, `http://{zullGatewayLocation}/{serviceName}/{uri}` example <http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80> or <http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR>
 
 ## Best pratices
 * **Dependencies**
