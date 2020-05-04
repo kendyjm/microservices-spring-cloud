@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Naming Server + Exchange Services instances + Conversion Service + Zuul Api Gateway" type="CompoundRunConfigurationType">
+    <toRun name="Eureka Naming Server 8761" type="MavenRunConfiguration" />
+    <toRun name="Zuul API Gateway Server 8765" type="MavenRunConfiguration" />
+    <toRun name="Currency Exchange Service (DEFAULT) 8000" type="MavenRunConfiguration" />
+    <toRun name="Currency Conversion Service 8100" type="MavenRunConfiguration" />
+    <toRun name="Currency Exchange Service (DEFAULT) 8001" type="MavenRunConfiguration" />
+    <method v="2" />
+  </configuration>
+</component>

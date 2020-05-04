@@ -1,8 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Conversion Default +Exchange Services instances (8000 &amp; 8001)" type="CompoundRunConfigurationType">
-    <toRun name="Currency Exchange Service (DEFAULT) 8001" type="MavenRunConfiguration" />
-    <toRun name="Currency Exchange Service (DEFAULT) 8000" type="MavenRunConfiguration" />
-    <toRun name="Currency Conversion Service (DEFAULT)" type="MavenRunConfiguration" />
-    <method v="2" />
-  </configuration>
-</component>

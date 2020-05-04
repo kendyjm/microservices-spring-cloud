@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Currency Conversion Service (DEFAULT) 8100" type="MavenRunConfiguration" factoryName="Maven" folderName="DEFAULT PROFILE" singleton="false" show_console_on_std_err="true">
+  <configuration default="false" name="Zuul API Gateway Server 8765" type="MavenRunConfiguration" factoryName="Maven" singleton="false" show_console_on_std_err="true">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings">
@@ -7,7 +7,7 @@
           <option name="delegateBuildToMaven" value="false" />
           <option name="environmentProperties">
             <map>
-              <entry key="server.port" value="8100" />
+              <entry key="server.port" value="8765" />
             </map>
           </option>
           <option name="jreName" value="#USE_PROJECT_JDK" />
@@ -35,7 +35,7 @@
             <map />
           </option>
           <option name="resolveToWorkspace" value="false" />
-          <option name="workingDirPath" value="$PROJECT_DIR$/currency-conversion-service" />
+          <option name="workingDirPath" value="$PROJECT_DIR$/netflix-zuul-api-gateway-server" />
         </MavenRunnerParameters>
       </option>
     </MavenSettings>

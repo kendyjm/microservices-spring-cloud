@@ -30,6 +30,7 @@
   * Create a component for the Zuul API Gateway server. `spring-cloud-starter-netflix-zuul`, `@EnableZuulProxy`
   * Decide/implement what should it do when it intercepts a request. `ZuulFilter`
   * Make sure all important requests are configured to pass through the Zuul API Gateway. `@FeignClient(name = {api-gateway-app-name})`, `http://{zullGatewayLocation}/{serviceName}/{uri}` example <http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80> or <http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR>
+* **Sleuth** : Distributed tracing, Spring Cloud Sleuth is a layer over a Tracer library named Brave. `spring-cloud-starter-sleuth`, `brave.sampler.Sampler`
 
 ## Best pratices
 * **Dependencies**
@@ -66,13 +67,14 @@ for more information on maintenance mode and a list of suggested replacements fo
 
 ### Reference Documentation
 For further reference, please consider the following sections:
-
+* [Microservices with Spring Cloud](https://spring.io/microservices)
 * [Spring Cloud Config](https://cloud.spring.io/spring-cloud-config/reference/html/)
 * [Bootstrap Application Context](https://cloud.spring.io/spring-cloud-commons/multi/multi__spring_cloud_context_application_context_services.html#_the_bootstrap_application_context)
 * [Spring Cloud OpenFeign : Declarative REST Client](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)
 * [Ribbon : Client-side load-balancing](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html)
 * [Eureka : Service Registration and Discovery](https://cloud.spring.io/spring-cloud-netflix/reference/html/#spring-cloud-eureka-server)
 * [Zuul API Gateway : Intelligent Routing and Filtering](https://cloud.spring.io/spring-cloud-netflix/multi/multi__router_and_filter_zuul.html)
+* [Sleuth : Distributed Tracing](https://cloud.spring.io/spring-cloud-sleuth/reference/html/)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
@@ -82,3 +84,4 @@ The following guides illustrate how to use some features concretely:
 * [Ribbon : Client-side load-balancing](https://spring.io/guides/gs/client-side-load-balancing/)
 * [Eureka : Service Registration and Discovery](https://spring.io/guides/gs/service-registration-and-discovery/)
 * [Zuul API Gateway : Intelligent Routing and Filtering](https://spring.io/guides/gs/routing-and-filtering/)
+* [Sleuth : Distributed Tracing](https://spring.io/projects/spring-cloud-sleuth#overview)
