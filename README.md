@@ -35,7 +35,8 @@
     * Here we used [**Rabbit MQ**](https://www.rabbitmq.com/)
     * Kafka is another well-known message broker
 * **Zipkin** : Distributed Tracing **System**. Zipkin in listening to our Rabbit MQ server. trace data consumed by Zipkin are validated, stored, indexed for lookups. Zipkin provides API and UI for retrieving&viewing traces. [Latest release](https://search.maven.org/remote_content?g=io.zipkin&a=zipkin-server&v=LATEST&c=exec)
-    * Start with 2 commands and [see UI](http://localhost:9411): 1) `set RABBIT_URI=amqp://localhost`  2) `java -jar zipkin-server-2.7.0-exec.jar` 
+    * Start Zipkin server with 2 commands and [see UI](http://localhost:9411): 1) `set RABBIT_URI=amqp://localhost`  2) `java -jar zipkin-server-2.7.0-exec.jar`
+    * Dependencies to add to our services :  `spring-cloud-starter-zipkin` (to trace message in a correct ziplin format), `org.springframework.amqp.spring-rabbit` (to put a trace message into Rabbit MQ)
 
 
 
