@@ -30,7 +30,14 @@
   * Create a component for the Zuul API Gateway server. `spring-cloud-starter-netflix-zuul`, `@EnableZuulProxy`
   * Decide/implement what should it do when it intercepts a request. `ZuulFilter`
   * Make sure all important requests are configured to pass through the Zuul API Gateway. `@FeignClient(name = {api-gateway-app-name})`, `http://{zullGatewayLocation}/{serviceName}/{uri}` example <http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80> or <http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR>
-* **Sleuth** : Distributed tracing, Spring Cloud Sleuth is a layer over a Tracer library named Brave. `spring-cloud-starter-sleuth`, `brave.sampler.Sampler`
+* **Sleuth** : Distributed tracing, look for the trace ID in log message. Spring Cloud Sleuth is a layer over a Tracer library named Brave. `spring-cloud-starter-sleuth`, `brave.sampler.Sampler`
+* **Message Broker** : Use of message broker to let the distributed tracing server consumes the messages/logs produced by the apps/services.
+    * Here we used [**Rabbit MQ**](https://www.rabbitmq.com/)
+    * Kafka is another well-known message broker
+* **Zipkin** : Distributed Tracing **System**. Zipkin in listening to our Rabbit MQ server. trace data consumed by Zipkin are validated, stored, indexed for lookups. Zipkin provides API and UI for retrieving&viewing traces. [Latest release](https://search.maven.org/remote_content?g=io.zipkin&a=zipkin-server&v=LATEST&c=exec)
+    * Start with 2 commands and [see UI](http://localhost:9411): 1) `set RABBIT_URI=amqp://localhost`  2) `java -jar zipkin-server-2.7.0-exec.jar` 
+
+
 
 ## Best pratices
 * **Dependencies**
@@ -61,27 +68,35 @@ for more information on maintenance mode and a list of suggested replacements fo
 * [Feign and Ribbon](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-feign-and-ribbon)
 * [Naming Server Eureka and Ribbon](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-naming-server-eureka-and-ribbon)
 * [Zuul API Gateway](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zuul-api-gateway)
-
+* [Zipkin](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zipkin)
 
 ## Startup
 
 ### Reference Documentation
 For further reference, please consider the following sections:
-* [Microservices with Spring Cloud](https://spring.io/microservices)
 * [Spring Cloud Config](https://cloud.spring.io/spring-cloud-config/reference/html/)
 * [Bootstrap Application Context](https://cloud.spring.io/spring-cloud-commons/multi/multi__spring_cloud_context_application_context_services.html#_the_bootstrap_application_context)
 * [Spring Cloud OpenFeign : Declarative REST Client](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)
-* [Ribbon : Client-side load-balancing](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html)
-* [Eureka : Service Registration and Discovery](https://cloud.spring.io/spring-cloud-netflix/reference/html/#spring-cloud-eureka-server)
-* [Zuul API Gateway : Intelligent Routing and Filtering](https://cloud.spring.io/spring-cloud-netflix/multi/multi__router_and_filter_zuul.html)
-* [Sleuth : Distributed Tracing](https://cloud.spring.io/spring-cloud-sleuth/reference/html/)
+* [Spring Cloud Ribbon : Client-side load-balancing](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-ribbon.html)
+* [Spring Cloud Eureka : Service Registration and Discovery](https://cloud.spring.io/spring-cloud-netflix/reference/html/#spring-cloud-eureka-server)
+* [Spring Cloud Zuul API Gateway : Intelligent Routing and Filtering](https://cloud.spring.io/spring-cloud-netflix/multi/multi__router_and_filter_zuul.html)
+* [Spring Cloud Sleuth : Distributed Tracing](https://cloud.spring.io/spring-cloud-sleuth/reference/html/)
+* [Rabbit MQ : Message Broker](http://next.rabbitmq.com/documentation.html)
+* [Zipkin : Distributed Tracing System](https://github.com/openzipkin/zipkin)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
 
 * [Centralized Configuration](https://spring.io/guides/gs/centralized-configuration/)
 * [Spring Cloud OpenFeign : Declarative REST Client](https://spring.io/projects/spring-cloud-openfeign)
-* [Ribbon : Client-side load-balancing](https://spring.io/guides/gs/client-side-load-balancing/)
-* [Eureka : Service Registration and Discovery](https://spring.io/guides/gs/service-registration-and-discovery/)
-* [Zuul API Gateway : Intelligent Routing and Filtering](https://spring.io/guides/gs/routing-and-filtering/)
-* [Sleuth : Distributed Tracing](https://spring.io/projects/spring-cloud-sleuth#overview)
+* [Spring Cloud Ribbon : Client-side load-balancing](https://spring.io/guides/gs/client-side-load-balancing/)
+* [Spring Cloud Eureka : Service Registration and Discovery](https://spring.io/guides/gs/service-registration-and-discovery/)
+* [Spring Cloud Zuul API Gateway : Intelligent Routing and Filtering](https://spring.io/guides/gs/routing-and-filtering/)
+* [Spring Cloud Sleuth : Distributed Tracing](https://spring.io/projects/spring-cloud-sleuth#overview)
+* [Rabbit MQ : Tutorials](https://www.rabbitmq.com/getstarted.html)
+* [Zipkin : Distributed Tracing System](https://github.com/openzipkin/sleuth-webmvc-example#going-further).
+
+### Architecture
+See [Microservices with Spring Cloud](https://spring.io/microservices)
+
+![diagram-microservices](diagram-microservices-dark.svg)
