@@ -17,11 +17,12 @@
 * Implement Distributed tracing with Spring Cloud Sleuth and Zipkin
 * Implement Fault Tolerance with Zipkin
 
-## Keywords 
+## Keywords
+
 * **Spring Cloud Config Server** : `spring-cloud-config-server` (config-server) as a dependency, annotation `@EnableConfigServer` in main class, `spring.cloud.config.server.git.uri` in configuration file application.properties
 * **Any service** : `spring-cloud-starter-config` (config-client) as a dependency, `spring.application.name` and `spring.cloud.config.uri` in configuration file renamed as bootstrap.properties. see `http://{configServerLocation}/{serviceName}/{default|dev|qa...}` to display the retrieved/current configuration of a service.
-    * A service requests, at startup, its config to the server. to reflect a config change, restart the service or call actuator endpoint <http://{appHost}:{appPort}/application/refresh>
-        *  In a cloud/microservices environment, go to every single client and reload configuration by accessing actuator endpoint is a pain...see below how Spring Cloud Bus solve this problem. 
+  * A service requests, at startup, its config to the server. to reflect a config change, restart the service or call actuator endpoint <http://{appHost}:{appPort}/application/refresh>
+    * In a cloud/microservices environment, go to every single client and reload configuration by accessing actuator endpoint is a pain...see below how Spring Cloud Bus solve this problem.
 * **Git Repository** : contains configuration files for each service/env : {spring.application.name}[dev|qa|blabla].properties
 * **Spring Cloud OpenFeign** : Is a declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations (see `@FeignClient`)
 * **Spring Cloud Ribbon** : allows client-side loadbalancing (see `spring-cloud-starter-netflix-ribbon`, `@RibbonClient` and `{serviceName}.ribbon.listOfServers`). [Somes details](https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers#common-rules) about rules available.
@@ -34,57 +35,23 @@
   * Make sure all important requests are configured to pass through the Zuul API Gateway. `@FeignClient(name = {api-gateway-app-name})`, `http://{zullGatewayLocation}/{serviceName}/{uri}` example <http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80> or <http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR>
 * **Spring Cloud Sleuth** : Distributed tracing, look for the trace ID in log message. Spring Cloud Sleuth is a layer over a Tracer library named Brave. `spring-cloud-starter-sleuth`, `brave.sampler.Sampler`
 * **Message Broker** : Use of message broker to let the distributed tracing server consumes the messages/logs produced by the apps/services.
-    * Here we used [**Rabbit MQ**](https://www.rabbitmq.com/)
-    * Kafka is another well-known message broker
+  * Here we used [**Rabbit MQ**](https://www.rabbitmq.com/)
+  * Kafka is another well-known message broker
 * **Zipkin** : Distributed Tracing **System**. Zipkin in listening to our Rabbit MQ server. trace data consumed by Zipkin are validated, stored, indexed for lookups. Zipkin provides API and UI for retrieving&viewing traces. [Latest release](https://search.maven.org/remote_content?g=io.zipkin&a=zipkin-server&v=LATEST&c=exec)
-    * Start Zipkin server with 2 commands and [see Zipkin UI](http://localhost:9411): 1) `set RABBIT_URI=amqp://localhost`  2) `java -jar zipkin-server-2.7.0-exec.jar`
-    * Dependencies to add to our services :  `spring-cloud-starter-zipkin` (to trace message in a correct ziplin format), `org.springframework.amqp.spring-rabbit` (to put a trace message into Rabbit MQ)
+  * Start Zipkin server with 2 commands and [see Zipkin UI](http://localhost:9411): 1) `set RABBIT_URI=amqp://localhost`  2) `java -jar zipkin-server-2.7.0-exec.jar`
+  * Dependencies to add to our services :  `spring-cloud-starter-zipkin` (to trace message in a correct ziplin format), `org.springframework.amqp.spring-rabbit` (to put a trace message into Rabbit MQ)
 * **Spring Cloud Bus** : uses lightweight message broker to link distributed system nodes. The primary usage is to broadcast configuration changes or other management information. We can think about it as a distributed Actuator.
-    * Spring Cloud Bus uses Spring Cloud Stream to broadcast the messages. So, to get messages to flow, you need only include the binder implementation of your choice in the classpath. There are convenient starters for the bus with AMQP (RabbitMQ) and Kafka (`spring-cloud-starter-bus-[amqp|kafka]`) add it to your config-server and services.
-    * Call <http://{appHost}:{appPort}/application/bus-refresh> [actuator endpoint](https://cloud.spring.io/spring-cloud-bus/reference/html/#bus-endpoints) to refresh every instance of a service
-        * With multi instances for multi services you can create a REST service which hits one instance of each service.
-        * Use of auto-refresh could be a good option, see [spring-cloud-config-monitor](https://cloud.spring.io/spring-cloud-config/multi/multi__push_notifications_and_spring_cloud_bus.html)
+  * Spring Cloud Bus uses Spring Cloud Stream to broadcast the messages. So, to get messages to flow, you need only include the binder implementation of your choice in the classpath. There are convenient starters for the bus with AMQP (RabbitMQ) and Kafka (`spring-cloud-starter-bus-[amqp|kafka]`) add it to your config-server and services.
+  * Call <http://{appHost}:{appPort}/application/bus-refresh> [actuator endpoint](https://cloud.spring.io/spring-cloud-bus/reference/html/#bus-endpoints) to refresh every instance of a service
+    * With multi instances for multi services you can create a REST service which hits one instance of each service.
+    * Use of auto-refresh could be a good option, see [spring-cloud-config-monitor](https://cloud.spring.io/spring-cloud-config/multi/multi__push_notifications_and_spring_cloud_bus.html)
 * **Spring Cloud Hystrix** : implements the [circuit breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html). Having an open circuit stops cascading failures and allows overwhelmed or failing services time to recover. The fallback can be another Hystrix protected call, static data, or a sensible empty value. Fallbacks may be chained so that the first fallback makes some other business call, which in turn falls back to static data.
-    * `spring-cloud-starter-netflix-hystrix`, `@EnableHystrix`, `@HystrixCommand(fallbackMethod = "myfallbackMethod")`
+  * `spring-cloud-starter-netflix-hystrix`, `@EnableHystrix`, `@HystrixCommand(fallbackMethod = "myfallbackMethod")`
 
+## Reference Documentation
 
-## Best pratices
-* **Dependencies**
-    * Every service should add Config-Client `spring-cloud-starter-config` as a dependency to be able to connect to the Spring-Cloud config server.
-    * While the Config server has `spring-cloud-config-server`
-* **Naming** : Give a name to your applications `spring.application.name` to easily identify it
-* **Configuration** : prefix your properties with the application name to easily identify them
-    * Retrieve them with a class annotated with `@ConfigurationProperties`
- 
-## Spring Cloud Netflix Maintenance Mode
-
-Some dependencies used in this project are in maintenance mode:
-
-* Ribbon
-* Zuul
-* Hystrix
-
-The decision to move most of the Spring Cloud Netflix projects to maintenance mode was
-a response to Netflix not continuing maintenance of many of the libraries that Spring provided
-support for.
-
-See [this blog entry](https://spring.io/blog/2018/12/12/spring-cloud-greenwich-rc1-available-now#spring-cloud-netflix-projects-entering-maintenance-mode)
-for more information on maintenance mode and a list of suggested replacements for those libraries.
-
-## Debugging Problems
-* [Activate Spring Boot profile from IntelliJ](https://stackoverflow.com/a/52487280)
-* [Share IntelliJ RUN configurations](https://www.jetbrains.com/help/idea/sharing-run-debug-configurations.html#)
-* [Spring Cloud Config Server](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-spring-cloud-config-server)
-* [Feign and Ribbon](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-feign-and-ribbon)
-* [Naming Server Eureka and Ribbon](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-naming-server-eureka-and-ribbon)
-* [Zuul API Gateway](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zuul-api-gateway)
-* [Zipkin](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zipkin)
-* [Cloud Bus](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#bus-refresh-does-not-work)
-
-## Startup
-
-### Reference Documentation
 For further reference, please consider the following sections:
+
 * [Spring Cloud Config](https://cloud.spring.io/spring-cloud-config/reference/html/)
 * [Bootstrap Application Context](https://cloud.spring.io/spring-cloud-commons/multi/multi__spring_cloud_context_application_context_services.html#_the_bootstrap_application_context)
 * [Spring Cloud OpenFeign : Declarative REST Client](https://cloud.spring.io/spring-cloud-netflix/multi/multi_spring-cloud-feign.html)
@@ -97,7 +64,8 @@ For further reference, please consider the following sections:
 * [Spring Cloud Bus : Distributed Actuator/Communication channel](https://cloud.spring.io/spring-cloud-bus/reference/html/)
 * [Hystrix : Circuit Breaker pattern](https://cloud.spring.io/spring-cloud-netflix/2.2.x/reference/html/#circuit-breaker-spring-cloud-circuit-breaker-with-hystrix)
 
-### Guides
+## Guides
+
 The following guides illustrate how to use some features concretely:
 
 * [Centralized Configuration](https://spring.io/guides/gs/centralized-configuration/)
@@ -111,7 +79,38 @@ The following guides illustrate how to use some features concretely:
 * [Spring Cloud Bus : Distributed Actuator/Communication channel](https://spring.io/projects/spring-cloud-bus#samples)
 * [Hystrix : Circuit Breaker pattern](https://spring.io/guides/gs/circuit-breaker/)]
 
-### Architecture
-See [Microservices with Spring Cloud](https://spring.io/microservices)
+## Spring Cloud Netflix Maintenance Mode
 
+Some dependencies used in this project are in maintenance mode:
+
+* Ribbon
+* Zuul
+* Hystrix
+
+The decision to move most of the Spring Cloud Netflix projects to maintenance mode was a response to Netflix not continuing maintenance of many of the libraries that Spring provided support for.
+See [this blog entry](https://spring.io/blog/2018/12/12/spring-cloud-greenwich-rc1-available-now#spring-cloud-netflix-projects-entering-maintenance-mode) for more information on maintenance mode and a list of suggested replacements for those libraries.
+
+## Debugging Problems
+
+* [Activate Spring Boot profile from IntelliJ](https://stackoverflow.com/a/52487280)
+* [Share IntelliJ RUN configurations](https://www.jetbrains.com/help/idea/sharing-run-debug-configurations.html#)
+* [Spring Cloud Config Server](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-spring-cloud-config-server)
+* [Feign and Ribbon](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-feign-and-ribbon)
+* [Naming Server Eureka and Ribbon](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-naming-server-eureka-and-ribbon)
+* [Zuul API Gateway](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zuul-api-gateway)
+* [Zipkin](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zipkin)
+* [Cloud Bus](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#bus-refresh-does-not-work)
+  
+## More Reading about Microservices
+
+### Design and Governance of Microservices
+
+* <https://martinfowler.com/microservices/>
+* [Microservices with Spring Cloud](https://spring.io/microservices)
 ![diagram-microservices](diagram-microservices-dark.svg)
+
+### 12 Factor App
+
+* <https://12factor.net/>
+* [Best Practices in Cloud Native Applications](https://www.youtube.com/watch?v=wjqBxJX35fU>)
+* [DZone - the-12-factor-app-a-java-developers-perspective](https://dzone.com/articles/the-12-factor-app-a-java-developers-perspective)

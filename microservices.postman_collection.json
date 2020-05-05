@@ -1,0 +1,256 @@
+{
+  "info": {
+    "_postman_id": "6796b4fc-0481-4c8f-adae-d1a0e2b6d5d7",
+    "name": "Master Microservices with Spring Boot and Spring Cloud (part2:microservices)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "/limits port 8080",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/limits/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "limits",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/limits port 8081",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8081/limits/",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8081",
+          "path": [
+            "limits",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:8080/actuator/refresh (reflect config changes)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/actuator/refresh",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "actuator",
+            "refresh"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "http://localhost:8080/actuator/bus-refresh (broadcast config changes)",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/actuator/bus-refresh",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "actuator",
+            "bus-refresh"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/currency-exchange/from/{}/to/{} port 8000",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/currency-exchange/from/eur/to/INR",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "currency-exchange",
+            "from",
+            "eur",
+            "to",
+            "INR"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/currency-exchange/from/{}/to/{} port 8001",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8001/currency-exchange/from/EUR/to/inr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8001",
+          "path": [
+            "currency-exchange",
+            "from",
+            "EUR",
+            "to",
+            "inr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "/currency-converter/from/{}/to/{}/quantity/{quantity} port 8100",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8100/currency-converter/from/EUR/to/INR/quantity/80",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8100",
+          "path": [
+            "currency-converter",
+            "from",
+            "EUR",
+            "to",
+            "INR",
+            "quantity",
+            "80"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Feign, /currency-converter-feign/from/{}/to/{}/quantity/{quantity} port 8100",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8100/currency-converter-feign/from/EUR/to/INR/quantity/80",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8100",
+          "path": [
+            "currency-converter-feign",
+            "from",
+            "EUR",
+            "to",
+            "INR",
+            "quantity",
+            "80"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Zuul, call /currency-exchange-service/currency-exchange/from/{}/to/{} port 8765",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8765",
+          "path": [
+            "currency-exchange-service",
+            "currency-exchange",
+            "from",
+            "EUR",
+            "to",
+            "INR"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Zuul, call /currency-conversion-service/currency-converter-feign/from/{}/to/{}/quantity/{} port 8765",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8765",
+          "path": [
+            "currency-conversion-service",
+            "currency-converter-feign",
+            "from",
+            "EUR",
+            "to",
+            "INR",
+            "quantity",
+            "80"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Hystrix, /fault-tolerance-example",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/fault-tolerance-example",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "fault-tolerance-example"
+          ]
+        },
+        "description": "This endpoint fails with a runtimeexception, a fallback method returns values 999,9"
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
