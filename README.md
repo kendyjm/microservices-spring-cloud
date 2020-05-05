@@ -44,7 +44,8 @@
     * Call <http://{appHost}:{appPort}/application/bus-refresh> [actuator endpoint](https://cloud.spring.io/spring-cloud-bus/reference/html/#bus-endpoints) to refresh every instance of a service
         * With multi instances for multi services you can create a REST service which hits one instance of each service.
         * Use of auto-refresh could be a good option, see [spring-cloud-config-monitor](https://cloud.spring.io/spring-cloud-config/multi/multi__push_notifications_and_spring_cloud_bus.html)
-         
+* **Spring Cloud Hystrix** : implements the [circuit breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html). Having an open circuit stops cascading failures and allows overwhelmed or failing services time to recover. The fallback can be another Hystrix protected call, static data, or a sensible empty value. Fallbacks may be chained so that the first fallback makes some other business call, which in turn falls back to static data.
+    * `spring-cloud-starter-netflix-hystrix`, `@EnableHystrix`, `@HystrixCommand(fallbackMethod = "myfallbackMethod")`
 
 
 ## Best pratices
@@ -61,6 +62,7 @@ Some dependencies used in this project are in maintenance mode:
 
 * Ribbon
 * Zuul
+* Hystrix
 
 The decision to move most of the Spring Cloud Netflix projects to maintenance mode was
 a response to Netflix not continuing maintenance of many of the libraries that Spring provided
@@ -93,6 +95,7 @@ For further reference, please consider the following sections:
 * [Rabbit MQ : Message Broker](http://next.rabbitmq.com/documentation.html)
 * [Zipkin : Distributed Tracing System](https://github.com/openzipkin/zipkin)
 * [Spring Cloud Bus : Distributed Actuator/Communication channel](https://cloud.spring.io/spring-cloud-bus/reference/html/)
+* [Hystrix : Circuit Breaker pattern](https://cloud.spring.io/spring-cloud-netflix/2.2.x/reference/html/#circuit-breaker-spring-cloud-circuit-breaker-with-hystrix)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
@@ -106,6 +109,7 @@ The following guides illustrate how to use some features concretely:
 * [Rabbit MQ : Tutorials](https://www.rabbitmq.com/getstarted.html)
 * [Zipkin : Distributed Tracing System](https://github.com/openzipkin/sleuth-webmvc-example#going-further).
 * [Spring Cloud Bus : Distributed Actuator/Communication channel](https://spring.io/projects/spring-cloud-bus#samples)
+* [Hystrix : Circuit Breaker pattern](https://spring.io/guides/gs/circuit-breaker/)]
 
 ### Architecture
 See [Microservices with Spring Cloud](https://spring.io/microservices)
