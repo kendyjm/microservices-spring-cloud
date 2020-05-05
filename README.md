@@ -20,24 +20,26 @@
 ## Keywords 
 * **Spring Cloud Config Server** : `spring-cloud-config-server` (config-server) as a dependency, annotation `@EnableConfigServer` in main class, `spring.cloud.config.server.git.uri` in configuration file application.properties
 * **Any service** : `spring-cloud-starter-config` (config-client) as a dependency, `spring.application.name` and `spring.cloud.config.uri` in configuration file renamed as bootstrap.properties. see `http://{configServerLocation}/{serviceName}/{default|dev|qa...}` to display the retrieved/current configuration of a service.
+    * A service requests, at startup, its config to the server. to reflect a config change, restart the service or call actuator endpoint <http://{appHost}:{appPort}/application/refresh>
+        *  In a cloud/microservices environment, go to every single client and reload configuration by accessing actuator endpoint is a pain...see below how Spring Cloud Bus solve this problem. 
 * **Git Repository** : contains configuration files for each service/env : {spring.application.name}[dev|qa|blabla].properties
-* **OpenFeign** : Is a declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations (see `@FeignClient`)
-* **Ribbon** : allows client-side loadbalancing (see `spring-cloud-starter-netflix-ribbon`, `@RibbonClient` and `{serviceName}.ribbon.listOfServers`). [Somes details](https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers#common-rules) about rules available.
-* **Eureka** : service registry, useful because it makes client-side load-balancing easier and decouples service providers from consumers without the need for DNS.
+* **Spring Cloud OpenFeign** : Is a declarative REST Client: Feign creates a dynamic implementation of an interface decorated with JAX-RS or Spring MVC annotations (see `@FeignClient`)
+* **Spring Cloud Ribbon** : allows client-side loadbalancing (see `spring-cloud-starter-netflix-ribbon`, `@RibbonClient` and `{serviceName}.ribbon.listOfServers`). [Somes details](https://github.com/Netflix/ribbon/wiki/Working-with-load-balancers#common-rules) about rules available.
+* **Spring Cloud Eureka** : service registry, useful because it makes client-side load-balancing easier and decouples service providers from consumers without the need for DNS.
   * Server : `spring-cloud-starter-netflix-eureka-server`, `@EnableEurekaServer`, `eureka.client.register-with-eureka`, `eureka.client.fetch-registry`, [Eureka UI](http://localhost:8761/)
   * Client : `spring-cloud-starter-netflix-eureka-client`, `@EnableDiscoveryClient`, `eureka.client.service-url.default-zone`
-* **Zuul** : Api Gateway, all calls get routed through the API gateway, with common fetures like authentication, authorization and security, rate limits, fault tolerance, service aggregation; it's a great place for debugging, analytics...
+* **Spring Cloud Zuul** : Api Gateway, all calls get routed through the API gateway, with common fetures like authentication, authorization and security, rate limits, fault tolerance, service aggregation; it's a great place for debugging, analytics...
   * Create a component for the Zuul API Gateway server. `spring-cloud-starter-netflix-zuul`, `@EnableZuulProxy`
   * Decide/implement what should it do when it intercepts a request. `ZuulFilter`
   * Make sure all important requests are configured to pass through the Zuul API Gateway. `@FeignClient(name = {api-gateway-app-name})`, `http://{zullGatewayLocation}/{serviceName}/{uri}` example <http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80> or <http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR>
-* **Sleuth** : Distributed tracing, look for the trace ID in log message. Spring Cloud Sleuth is a layer over a Tracer library named Brave. `spring-cloud-starter-sleuth`, `brave.sampler.Sampler`
+* **Spring Cloud Sleuth** : Distributed tracing, look for the trace ID in log message. Spring Cloud Sleuth is a layer over a Tracer library named Brave. `spring-cloud-starter-sleuth`, `brave.sampler.Sampler`
 * **Message Broker** : Use of message broker to let the distributed tracing server consumes the messages/logs produced by the apps/services.
     * Here we used [**Rabbit MQ**](https://www.rabbitmq.com/)
     * Kafka is another well-known message broker
 * **Zipkin** : Distributed Tracing **System**. Zipkin in listening to our Rabbit MQ server. trace data consumed by Zipkin are validated, stored, indexed for lookups. Zipkin provides API and UI for retrieving&viewing traces. [Latest release](https://search.maven.org/remote_content?g=io.zipkin&a=zipkin-server&v=LATEST&c=exec)
-    * Start Zipkin server with 2 commands and [see UI](http://localhost:9411): 1) `set RABBIT_URI=amqp://localhost`  2) `java -jar zipkin-server-2.7.0-exec.jar`
+    * Start Zipkin server with 2 commands and [see Zipkin UI](http://localhost:9411): 1) `set RABBIT_URI=amqp://localhost`  2) `java -jar zipkin-server-2.7.0-exec.jar`
     * Dependencies to add to our services :  `spring-cloud-starter-zipkin` (to trace message in a correct ziplin format), `org.springframework.amqp.spring-rabbit` (to put a trace message into Rabbit MQ)
-
+* **Spring Cloud Bus** : uses lightweight message broker to link distributed system nodes. The primary usage is to broadcast configuration changes or other management information. We can think about it as a distributed Actuator.
 
 
 ## Best pratices

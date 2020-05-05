@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Limits Service (QA)" type="MavenRunConfiguration" factoryName="Maven" folderName="QA PROFILE" singleton="false" show_console_on_std_err="true">
+  <configuration default="false" name="Limits Service (QA) 8080" type="MavenRunConfiguration" factoryName="Maven" folderName="QA PROFILE" singleton="false" show_console_on_std_err="true">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings">
@@ -8,6 +8,7 @@
           <option name="environmentProperties">
             <map>
               <entry key="SPRING_PROFILES_ACTIVE" value="qa" />
+              <entry key="server.port" value="8080" />
             </map>
           </option>
           <option name="jreName" value="#USE_PROJECT_JDK" />

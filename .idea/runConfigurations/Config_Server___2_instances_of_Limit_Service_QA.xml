@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Config Server + 2 instances of Limit Service QA" type="CompoundRunConfigurationType">
+    <toRun name="Limits Service (QA) 8081" type="MavenRunConfiguration" />
+    <toRun name="Limits Service (QA) 8080" type="MavenRunConfiguration" />
+    <toRun name="Spring-Cloud Config Server 8888" type="MavenRunConfiguration" />
+    <method v="2" />
+  </configuration>
+</component>
