@@ -40,6 +40,11 @@
     * Start Zipkin server with 2 commands and [see Zipkin UI](http://localhost:9411): 1) `set RABBIT_URI=amqp://localhost`  2) `java -jar zipkin-server-2.7.0-exec.jar`
     * Dependencies to add to our services :  `spring-cloud-starter-zipkin` (to trace message in a correct ziplin format), `org.springframework.amqp.spring-rabbit` (to put a trace message into Rabbit MQ)
 * **Spring Cloud Bus** : uses lightweight message broker to link distributed system nodes. The primary usage is to broadcast configuration changes or other management information. We can think about it as a distributed Actuator.
+    * Spring Cloud Bus uses Spring Cloud Stream to broadcast the messages. So, to get messages to flow, you need only include the binder implementation of your choice in the classpath. There are convenient starters for the bus with AMQP (RabbitMQ) and Kafka (`spring-cloud-starter-bus-[amqp|kafka]`) add it to your config-server and services.
+    * Call <http://{appHost}:{appPort}/application/bus-refresh> [actuator endpoint](https://cloud.spring.io/spring-cloud-bus/reference/html/#bus-endpoints) to refresh every instance of a service
+        * With multi instances for multi services you can create a REST service which hits one instance of each service.
+        * Use of auto-refresh could be a good option, see [spring-cloud-config-monitor](https://cloud.spring.io/spring-cloud-config/multi/multi__push_notifications_and_spring_cloud_bus.html)
+         
 
 
 ## Best pratices
@@ -72,6 +77,7 @@ for more information on maintenance mode and a list of suggested replacements fo
 * [Naming Server Eureka and Ribbon](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-naming-server-eureka-and-ribbon)
 * [Zuul API Gateway](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zuul-api-gateway)
 * [Zipkin](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#debugging-problems-with-zipkin)
+* [Cloud Bus](https://github.com/in28minutes/in28minutes-initiatives/tree/master/The-in28Minutes-TroubleshootingGuide-And-FAQ#bus-refresh-does-not-work)
 
 ## Startup
 
@@ -86,6 +92,7 @@ For further reference, please consider the following sections:
 * [Spring Cloud Sleuth : Distributed Tracing](https://cloud.spring.io/spring-cloud-sleuth/reference/html/)
 * [Rabbit MQ : Message Broker](http://next.rabbitmq.com/documentation.html)
 * [Zipkin : Distributed Tracing System](https://github.com/openzipkin/zipkin)
+* [Spring Cloud Bus : Distributed Actuator/Communication channel](https://cloud.spring.io/spring-cloud-bus/reference/html/)
 
 ### Guides
 The following guides illustrate how to use some features concretely:
@@ -98,6 +105,7 @@ The following guides illustrate how to use some features concretely:
 * [Spring Cloud Sleuth : Distributed Tracing](https://spring.io/projects/spring-cloud-sleuth#overview)
 * [Rabbit MQ : Tutorials](https://www.rabbitmq.com/getstarted.html)
 * [Zipkin : Distributed Tracing System](https://github.com/openzipkin/sleuth-webmvc-example#going-further).
+* [Spring Cloud Bus : Distributed Actuator/Communication channel](https://spring.io/projects/spring-cloud-bus#samples)
 
 ### Architecture
 See [Microservices with Spring Cloud](https://spring.io/microservices)
