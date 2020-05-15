@@ -5,7 +5,12 @@
 * Learning : <https://www.udemy.com/course/microservices-with-spring-boot-and-spring-cloud/learn/lecture/8005704#overview>
 * Resources : [GitHub](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices) et [FAQ](https://github.com/in28minutes/in28minutes-initiatives/blob/master/The-in28Minutes-TroubleshootingGuide-And-FAQ/quick-start.md)
 
+Instructor:
+
+* [Ranga Rao Karanam](https://www.linkedin.com/in/rangakaranam)
+
 ### Udemy Certificate of completion
+
 <https://www.udemy.com/certificate/UC-ed0e4498-34b0-485f-bce4-54782fc08206/>
 
 ## Content
