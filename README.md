@@ -4,10 +4,7 @@
 
 * Learning : <https://www.udemy.com/course/microservices-with-spring-boot-and-spring-cloud/learn/lecture/8005704#overview>
 * Resources : [GitHub](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices) and [FAQ](https://github.com/in28minutes/in28minutes-initiatives/blob/master/The-in28Minutes-TroubleshootingGuide-And-FAQ/quick-start.md)
-
-Instructor:
-
-* [Ranga Rao Karanam](https://www.linkedin.com/in/rangakaranam)
+* Instructor: [Ranga Rao Karanam](https://www.linkedin.com/in/rangakaranam)
 
 ### Udemy Certificate of completion (May 2020)
 
@@ -28,6 +25,11 @@ Instructor:
 ![diagram-microservices](assets/diagram-microservices-dark.svg)
 
 ## Getting Started
+
+### Overview of the services
+
+* [URLs](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#urls)
+* [Ports](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#ports)
 
 ### Prerequistes
 
@@ -50,16 +52,19 @@ Just run the docker images of RabbitMq and Zipkin:
 
 ### Run the services
 
-1. Firstly, run the Config Server from Run/Maven configuration `Spring-Cloud Config Server 8888` and check its logs to see a valid connection to RabbitMq:
+1. Firstly, run the Config Server and check its logs to see a valid connection to RabbitMq:
 
   ```bash
+  cd spring-cloud-config-server
+  ./mvnw spring-boot:run
+
   INFO o.s.a.r.c.CachingConnectionFactory : Created new connection: rabbitConnectionFactory#5bd6c5aa:133/SimpleConnection@3eb183a [delegate=amqp://guest@127.0.0.1:5672/, localPort= 49282]
   ```
 
 2. Run the Eureka Naming Server
 
   ```bash
-  cd spring-cloud-config-server
+  cd netflix-eureka-naming-server
   ./mvnw spring-boot:run
   ```
   
@@ -93,7 +98,7 @@ Look at the [Eureka UI](http://localhost:8761/), all your 4 instances should be 
 
 ### Request the application
 
-Convert 80EUR in INR by calling the conversion service through the Api Gateway : GET <>
+Convert 80EUR in INR by calling the conversion service through the Api Gateway :
 
 ```bash
 curl http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80
@@ -143,7 +148,7 @@ Check [Zipkin UI](http://localhost:9411/zipkin) to see the path followed by thes
 * **Spring Cloud Eureka** : service registry, useful because it makes client-side load-balancing easier and decouples service providers from consumers without the need for DNS.
   * Server : `spring-cloud-starter-netflix-eureka-server`, `@EnableEurekaServer`, `eureka.client.register-with-eureka`, `eureka.client.fetch-registry`, [Eureka UI](http://localhost:8761/)
   * Client : `spring-cloud-starter-netflix-eureka-client`, `@EnableDiscoveryClient`, `eureka.client.service-url.default-zone`
-* **Spring Cloud Zuul** : Api Gateway, all calls get routed through the API gateway, with common fetures like authentication, authorization and security, rate limits, fault tolerance, service aggregation; it's a great place for debugging, analytics...
+* **Spring Cloud Zuul** : Api Gateway, all calls get routed through the API gateway, with common features like authentication, authorization and security, rate limits, fault tolerance, service aggregation; it's a great place for debugging, analytics...
   * Create a component for the Zuul API Gateway server. `spring-cloud-starter-netflix-zuul`, `@EnableZuulProxy`
   * Decide/implement what should it do when it intercepts a request. `ZuulFilter`
   * Make sure all important requests are configured to pass through the Zuul API Gateway. `@FeignClient(name = {api-gateway-app-name})`, `http://{zullGatewayLocation}/{serviceName}/{uri}` example <http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80> or <http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR>
