@@ -3,13 +3,10 @@
 ## Context
 
 * Learning : <https://www.udemy.com/course/microservices-with-spring-boot-and-spring-cloud/learn/lecture/8005704#overview>
-* Resources : [GitHub](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices) et [FAQ](https://github.com/in28minutes/in28minutes-initiatives/blob/master/The-in28Minutes-TroubleshootingGuide-And-FAQ/quick-start.md)
+* Resources : [GitHub](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices) and [FAQ](https://github.com/in28minutes/in28minutes-initiatives/blob/master/The-in28Minutes-TroubleshootingGuide-And-FAQ/quick-start.md)
+* Instructor: [Ranga Rao Karanam](https://www.linkedin.com/in/rangakaranam)
 
-Instructor:
-
-* [Ranga Rao Karanam](https://www.linkedin.com/in/rangakaranam)
-
-### Udemy Certificate of completion
+### Udemy Certificate of completion (May 2020)
 
 <https://www.udemy.com/certificate/UC-ed0e4498-34b0-485f-bce4-54782fc08206/>
 
@@ -23,9 +20,123 @@ Instructor:
 * Implement dynamic scaling using Eureka Naming Server and Ribbon
 * Implement API Gateway with Zuul
 * Implement Distributed tracing with Spring Cloud Sleuth and Zipkin
-* Implement Fault Tolerance with Zipkin
+* Implement Fault Tolerance with Hystrix
 
-## Keywords
+![diagram-microservices](assets/diagram-microservices-dark.svg)
+
+## Getting Started
+
+### Overview of the services
+
+* [URLs](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#urls)
+* [Ports](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#ports)
+
+### Prerequistes
+
+* Install [Docker](https://docs.docker.com/get-docker/)
+* [Create a Config repo](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#commands)
+
+### Quick startup with Docker (recommended)
+
+Just run the docker images of RabbitMq and Zipkin:
+
+* [RabbitMQ](https://www.rabbitmq.com/download.html) : `docker run -d --rm --name rabbitmq -p 5672:5672 rabbitmq:latest`
+* [Zipkin](https://zipkin.io/pages/quickstart) : `docker run -d --name zipkin-tracing -e RABBIT_URI='amqp://{your_local_ip_ex:192.168.1.38}' -p 9411:9411 openzipkin/zipkin:latest`
+  * Once the server is running, you can view traces with the Zipkin UI at <http://localhost:9411/zipkin>
+
+### Manual installation and running (alternative)
+
+* [Install RabbitMQ](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#ranga-local-instructions)
+* [Install Zipkin](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#zipkin-installation)
+  * Once the server is running, you can view traces with the Zipkin UI at <http://localhost:9411/zipkin>
+
+### Run the services
+
+1. Firstly, run the Config Server and check its logs to see a valid connection to RabbitMq:
+
+  ```bash
+  cd spring-cloud-config-server
+  ./mvnw spring-boot:run
+
+  INFO o.s.a.r.c.CachingConnectionFactory : Created new connection: rabbitConnectionFactory#5bd6c5aa:133/SimpleConnection@3eb183a [delegate=amqp://guest@127.0.0.1:5672/, localPort= 49282]
+  ```
+
+2. Run the Eureka Naming Server
+
+  ```bash
+  cd netflix-eureka-naming-server
+  ./mvnw spring-boot:run
+  ```
+  
+3. Run some instances of the Exchange service by specifying the server port
+
+  ```bash
+  cd currency-exchange-service
+  ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=8000"
+  ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=8001"
+  ```
+  
+4. Run one instance of the Conversion service
+
+  ```bash
+  cd currency-conversion-service
+  ./mvnw spring-boot:run
+  ```
+  
+5. Run the Zuul Api Gateway server
+
+  ```bash
+  cd netflix-zuul-api-gateway-server
+  ./mvnw spring-boot:run
+  ```
+
+### Checks the state of the services
+
+Look at the [Eureka UI](http://localhost:8761/), all your 4 instances should be UP :
+
+![eureka-naming-server](assets/eureka-naming-server.png)
+
+### Request the application
+
+Convert 80EUR in INR by calling the conversion service through the Api Gateway :
+
+```bash
+curl http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80
+
+{
+  "id": 1002,
+  "from": "EUR",
+  "to": "INR",
+  "conversionMultiple": 75.00,
+  "quantity": 80,
+  "totalCalculatedAmount": 6000.00,
+  "port": 8000
+}
+```
+
+Send a 2nd call, check the port value, the request reached the 2nd instance of the Exchange service.
+
+```bash
+curl http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80
+
+{
+  "id": 1002,
+  "from": "EUR",
+  "to": "INR",
+  "conversionMultiple": 75.00,
+  "quantity": 80,
+  "totalCalculatedAmount": 6000.00,
+  "port": 8001
+}
+```
+
+Check [Zipkin UI](http://localhost:9411/zipkin) to see the path followed by these 2 requests :
+
+![zipkin-ui-requests](assets/zipkin-ui-requests.png)
+![zipkin-ui-request-001](assets/zipkin-ui-request-001.png)
+![zipkin-ui-request-002](assets/zipkin-ui-request-002.png)
+
+## Implementation
 
 * **Spring Cloud Config Server** : `spring-cloud-config-server` (config-server) as a dependency, annotation `@EnableConfigServer` in main class, `spring.cloud.config.server.git.uri` in configuration file application.properties
 * **Any service** : `spring-cloud-starter-config` (config-client) as a dependency, `spring.application.name` and `spring.cloud.config.uri` in configuration file renamed as bootstrap.properties. see `http://{configServerLocation}/{serviceName}/{default|dev|qa...}` to display the retrieved/current configuration of a service.
@@ -37,7 +148,7 @@ Instructor:
 * **Spring Cloud Eureka** : service registry, useful because it makes client-side load-balancing easier and decouples service providers from consumers without the need for DNS.
   * Server : `spring-cloud-starter-netflix-eureka-server`, `@EnableEurekaServer`, `eureka.client.register-with-eureka`, `eureka.client.fetch-registry`, [Eureka UI](http://localhost:8761/)
   * Client : `spring-cloud-starter-netflix-eureka-client`, `@EnableDiscoveryClient`, `eureka.client.service-url.default-zone`
-* **Spring Cloud Zuul** : Api Gateway, all calls get routed through the API gateway, with common fetures like authentication, authorization and security, rate limits, fault tolerance, service aggregation; it's a great place for debugging, analytics...
+* **Spring Cloud Zuul** : Api Gateway, all calls get routed through the API gateway, with common features like authentication, authorization and security, rate limits, fault tolerance, service aggregation; it's a great place for debugging, analytics...
   * Create a component for the Zuul API Gateway server. `spring-cloud-starter-netflix-zuul`, `@EnableZuulProxy`
   * Decide/implement what should it do when it intercepts a request. `ZuulFilter`
   * Make sure all important requests are configured to pass through the Zuul API Gateway. `@FeignClient(name = {api-gateway-app-name})`, `http://{zullGatewayLocation}/{serviceName}/{uri}` example <http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80> or <http://localhost:8765/currency-exchange-service/currency-exchange/from/EUR/to/INR>
@@ -53,10 +164,10 @@ Instructor:
   * Call <http://{appHost}:{appPort}/application/bus-refresh> [actuator endpoint](https://cloud.spring.io/spring-cloud-bus/reference/html/#bus-endpoints) to refresh every instance of a service
     * With multi instances for multi services you can create a REST service which hits one instance of each service.
     * Use of auto-refresh could be a good option, see [spring-cloud-config-monitor](https://cloud.spring.io/spring-cloud-config/multi/multi__push_notifications_and_spring_cloud_bus.html)
-* **Spring Cloud Hystrix** : implements the [circuit breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html). Having an open circuit stops cascading failures and allows overwhelmed or failing services time to recover. The fallback can be another Hystrix protected call, static data, or a sensible empty value. Fallbacks may be chained so that the first fallback makes some other business call, which in turn falls back to static data.
+* **Spring Cloud Hystrix** : enable Fault Tolerance by implementing the [circuit breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html). Having an open circuit stops cascading failures and allows overwhelmed or failing services time to recover. The fallback can be another Hystrix protected call, static data, or a sensible empty value. Fallbacks may be chained so that the first fallback makes some other business call, which in turn falls back to static data.
   * `spring-cloud-starter-netflix-hystrix`, `@EnableHystrix`, `@HystrixCommand(fallbackMethod = "myfallbackMethod")`
 
-## Reference Documentation
+# Reference Documentation
 
 For further reference, please consider the following sections:
 
@@ -115,7 +226,6 @@ See [this blog entry](https://spring.io/blog/2018/12/12/spring-cloud-greenwich-r
 
 * <https://martinfowler.com/microservices/>
 * [Microservices with Spring Cloud](https://spring.io/microservices)
-![diagram-microservices](diagram-microservices-dark.svg)
 
 ### 12 Factor App
 
