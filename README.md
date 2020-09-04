@@ -25,11 +25,113 @@ Instructor:
 * Implement Distributed tracing with Spring Cloud Sleuth and Zipkin
 * Implement Fault Tolerance with Hystrix
 
-![diagram-microservices](diagram-microservices-dark.svg)
+![diagram-microservices](assets/diagram-microservices-dark.svg)
 
 ## Getting Started
 
-## Implementation details
+### Prerequistes
+
+* Install [Docker](https://docs.docker.com/get-docker/)
+* [Create a Config repo](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#commands)
+
+### Quick startup with Docker (recommended)
+
+Just run the docker images of RabbitMq and Zipkin:
+
+* [RabbitMQ](https://www.rabbitmq.com/download.html) : `docker run -d --rm --name rabbitmq -p 5672:5672 rabbitmq:latest`
+* [Zipkin](https://zipkin.io/pages/quickstart) : `docker run -d --name zipkin-tracing -e RABBIT_URI='amqp://{your_local_ip_ex:192.168.1.38}' -p 9411:9411 openzipkin/zipkin:latest`
+  * Once the server is running, you can view traces with the Zipkin UI at <http://localhost:9411/zipkin>
+
+### Manual installation and running (alternative)
+
+* [Install RabbitMQ](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#ranga-local-instructions)
+* [Install Zipkin](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices#zipkin-installation)
+  * Once the server is running, you can view traces with the Zipkin UI at <http://localhost:9411/zipkin>
+
+### Run the services
+
+1. Firstly, run the Config Server from Run/Maven configuration `Spring-Cloud Config Server 8888` and check its logs to see a valid connection to RabbitMq:
+
+  ```bash
+  INFO o.s.a.r.c.CachingConnectionFactory : Created new connection: rabbitConnectionFactory#5bd6c5aa:133/SimpleConnection@3eb183a [delegate=amqp://guest@127.0.0.1:5672/, localPort= 49282]
+  ```
+
+2. Run the Eureka Naming Server
+
+  ```bash
+  cd spring-cloud-config-server
+  ./mvnw spring-boot:run
+  ```
+  
+3. Run some instances of the Exchange service by specifying the server port
+
+  ```bash
+  cd currency-exchange-service
+  ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=8000"
+  ./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Dserver.port=8001"
+  ```
+  
+4. Run one instance of the Conversion service
+
+  ```bash
+  cd currency-conversion-service
+  ./mvnw spring-boot:run
+  ```
+  
+5. Run the Zuul Api Gateway server
+
+  ```bash
+  cd netflix-zuul-api-gateway-server
+  ./mvnw spring-boot:run
+  ```
+
+### Checks the state of the services
+
+Look at the [Eureka UI](http://localhost:8761/), all your 4 instances should be UP :
+
+![eureka-naming-server](assets/eureka-naming-server.png)
+
+### Request the application
+
+Convert 80EUR in INR by calling the conversion service through the Api Gateway : GET <>
+
+```bash
+curl http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80
+
+{
+  "id": 1002,
+  "from": "EUR",
+  "to": "INR",
+  "conversionMultiple": 75.00,
+  "quantity": 80,
+  "totalCalculatedAmount": 6000.00,
+  "port": 8000
+}
+```
+
+Send a 2nd call, check the port value, the request reached the 2nd instance of the Exchange service.
+
+```bash
+curl http://localhost:8765/currency-conversion-service/currency-converter-feign/from/EUR/to/INR/quantity/80
+
+{
+  "id": 1002,
+  "from": "EUR",
+  "to": "INR",
+  "conversionMultiple": 75.00,
+  "quantity": 80,
+  "totalCalculatedAmount": 6000.00,
+  "port": 8001
+}
+```
+
+Check [Zipkin UI](http://localhost:9411/zipkin) to see the path followed by these 2 requests :
+
+![zipkin-ui-requests](assets/zipkin-ui-requests.png)
+![zipkin-ui-request-001](assets/zipkin-ui-request-001.png)
+![zipkin-ui-request-002](assets/zipkin-ui-request-002.png)
+
+## Implementation
 
 * **Spring Cloud Config Server** : `spring-cloud-config-server` (config-server) as a dependency, annotation `@EnableConfigServer` in main class, `spring.cloud.config.server.git.uri` in configuration file application.properties
 * **Any service** : `spring-cloud-starter-config` (config-client) as a dependency, `spring.application.name` and `spring.cloud.config.uri` in configuration file renamed as bootstrap.properties. see `http://{configServerLocation}/{serviceName}/{default|dev|qa...}` to display the retrieved/current configuration of a service.
@@ -60,7 +162,7 @@ Instructor:
 * **Spring Cloud Hystrix** : enable Fault Tolerance by implementing the [circuit breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html). Having an open circuit stops cascading failures and allows overwhelmed or failing services time to recover. The fallback can be another Hystrix protected call, static data, or a sensible empty value. Fallbacks may be chained so that the first fallback makes some other business call, which in turn falls back to static data.
   * `spring-cloud-starter-netflix-hystrix`, `@EnableHystrix`, `@HystrixCommand(fallbackMethod = "myfallbackMethod")`
 
-## Reference Documentation
+# Reference Documentation
 
 For further reference, please consider the following sections:
 
