@@ -3,13 +3,13 @@
 ## Context
 
 * Learning : <https://www.udemy.com/course/microservices-with-spring-boot-and-spring-cloud/learn/lecture/8005704#overview>
-* Resources : [GitHub](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices) et [FAQ](https://github.com/in28minutes/in28minutes-initiatives/blob/master/The-in28Minutes-TroubleshootingGuide-And-FAQ/quick-start.md)
+* Resources : [GitHub](https://github.com/in28minutes/spring-microservices/tree/master/03.microservices) and [FAQ](https://github.com/in28minutes/in28minutes-initiatives/blob/master/The-in28Minutes-TroubleshootingGuide-And-FAQ/quick-start.md)
 
 Instructor:
 
 * [Ranga Rao Karanam](https://www.linkedin.com/in/rangakaranam)
 
-### Udemy Certificate of completion
+### Udemy Certificate of completion (May 2020)
 
 <https://www.udemy.com/certificate/UC-ed0e4498-34b0-485f-bce4-54782fc08206/>
 
@@ -23,9 +23,13 @@ Instructor:
 * Implement dynamic scaling using Eureka Naming Server and Ribbon
 * Implement API Gateway with Zuul
 * Implement Distributed tracing with Spring Cloud Sleuth and Zipkin
-* Implement Fault Tolerance with Zipkin
+* Implement Fault Tolerance with Hystrix
 
-## Keywords
+![diagram-microservices](diagram-microservices-dark.svg)
+
+## Getting Started
+
+## Implementation details
 
 * **Spring Cloud Config Server** : `spring-cloud-config-server` (config-server) as a dependency, annotation `@EnableConfigServer` in main class, `spring.cloud.config.server.git.uri` in configuration file application.properties
 * **Any service** : `spring-cloud-starter-config` (config-client) as a dependency, `spring.application.name` and `spring.cloud.config.uri` in configuration file renamed as bootstrap.properties. see `http://{configServerLocation}/{serviceName}/{default|dev|qa...}` to display the retrieved/current configuration of a service.
@@ -53,7 +57,7 @@ Instructor:
   * Call <http://{appHost}:{appPort}/application/bus-refresh> [actuator endpoint](https://cloud.spring.io/spring-cloud-bus/reference/html/#bus-endpoints) to refresh every instance of a service
     * With multi instances for multi services you can create a REST service which hits one instance of each service.
     * Use of auto-refresh could be a good option, see [spring-cloud-config-monitor](https://cloud.spring.io/spring-cloud-config/multi/multi__push_notifications_and_spring_cloud_bus.html)
-* **Spring Cloud Hystrix** : implements the [circuit breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html). Having an open circuit stops cascading failures and allows overwhelmed or failing services time to recover. The fallback can be another Hystrix protected call, static data, or a sensible empty value. Fallbacks may be chained so that the first fallback makes some other business call, which in turn falls back to static data.
+* **Spring Cloud Hystrix** : enable Fault Tolerance by implementing the [circuit breaker pattern](https://martinfowler.com/bliki/CircuitBreaker.html). Having an open circuit stops cascading failures and allows overwhelmed or failing services time to recover. The fallback can be another Hystrix protected call, static data, or a sensible empty value. Fallbacks may be chained so that the first fallback makes some other business call, which in turn falls back to static data.
   * `spring-cloud-starter-netflix-hystrix`, `@EnableHystrix`, `@HystrixCommand(fallbackMethod = "myfallbackMethod")`
 
 ## Reference Documentation
@@ -115,7 +119,6 @@ See [this blog entry](https://spring.io/blog/2018/12/12/spring-cloud-greenwich-r
 
 * <https://martinfowler.com/microservices/>
 * [Microservices with Spring Cloud](https://spring.io/microservices)
-![diagram-microservices](diagram-microservices-dark.svg)
 
 ### 12 Factor App
 
